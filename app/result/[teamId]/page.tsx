@@ -87,55 +87,71 @@ export default function ResultPage({ params }: { params: { teamId: string } }) {
         </p>
       </section>
 
+      {/* 若所有详细内容都缺，显示统一的"详情待补"占位 */}
+      {!team.why && !team.watchGuide?.length && !team.audience?.length && (
+        <section className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-6 py-10 text-center">
+          <p className="text-base font-semibold text-slate-200">详细介绍正在赶来 ⚽</p>
+          <p className="mt-1.5 text-xs text-slate-400">
+            这支球队的人格档案我们还在打磨，先看一眼基础信息吧
+          </p>
+        </section>
+      )}
+
       {/* Why */}
-      <section>
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-          为什么是你的本命
-        </h2>
-        <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-slate-200">
-          {team.why}
-        </p>
-      </section>
+      {team.why && (
+        <section>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+            为什么是你的本命
+          </h2>
+          <p className="mt-3 whitespace-pre-line text-base leading-relaxed text-slate-200">
+            {team.why}
+          </p>
+        </section>
+      )}
 
       {/* Watch Guide */}
-      <section>
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-          入门观赛指南
-        </h2>
-        <ul className="mt-3 space-y-2">
-          {team.watchGuide.map((line, idx) => (
-            <li
-              key={idx}
-              className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200"
-            >
-              <span
-                className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-                style={{ backgroundColor: team.accent, color: "#020617" }}
+      {team.watchGuide && team.watchGuide.length > 0 && (
+        <section>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+            入门观赛指南
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {team.watchGuide.map((line, idx) => (
+              <li
+                key={idx}
+                className="flex gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200"
               >
-                {idx + 1}
-              </span>
-              <span>{line}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+                <span
+                  className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                  style={{ backgroundColor: team.accent, color: "#020617" }}
+                >
+                  {idx + 1}
+                </span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Audience tags */}
-      <section>
-        <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-          适合人群
-        </h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {team.audience.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200"
-            >
-              # {tag}
-            </span>
-          ))}
-        </div>
-      </section>
+      {team.audience && team.audience.length > 0 && (
+        <section>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+            适合人群
+          </h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {team.audience.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200"
+              >
+                # {tag}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* CTAs */}
       <section className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">

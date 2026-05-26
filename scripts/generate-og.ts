@@ -12,7 +12,7 @@
  */
 import sharp from "sharp";
 import QRCode from "qrcode";
-import { mkdir } from "node:fs/promises";
+import { mkdir, rm } from "node:fs/promises";
 import { resolve } from "node:path";
 import { TEAMS } from "../data/teams";
 
@@ -175,6 +175,8 @@ async function render(job: RenderJob) {
 }
 
 async function main() {
+  // 清空旧图，避免删队后留下孤儿 PNG（如丹麦、波兰、尼日利亚等）
+  await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
 
   // 1. 默认 OG

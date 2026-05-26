@@ -66,7 +66,7 @@ export default function TeamsPage() {
                   {team.tagline}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
-                  {team.audience.slice(0, 3).map((tag) => (
+                  {(team.audience ?? []).slice(0, 3).map((tag) => (
                     <span
                       key={tag}
                       className="rounded-full bg-white/5 px-2 py-0.5 text-[11px] text-slate-300"
@@ -74,6 +74,11 @@ export default function TeamsPage() {
                       #{tag}
                     </span>
                   ))}
+                  {!team.audience && (
+                    <span className="rounded-full border border-dashed border-white/15 px-2 py-0.5 text-[11px] text-slate-500">
+                      详情待补
+                    </span>
+                  )}
                 </div>
               </div>
             </Link>
