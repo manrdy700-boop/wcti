@@ -6,3 +6,5 @@ out
 *.log
 .vercel
 .claude/
+# OG 图由构建时脚本生成，不入仓库（npm run generate:og 重建）
+public/og/

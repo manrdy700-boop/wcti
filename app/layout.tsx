@@ -2,9 +2,54 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import "./globals.css";
 
+// 站点根 URL：等备案下来切到 wcti.cn 时，把 .env.local 里这个值改了即可。
+// 必须是完整 https:// 形式，OG 图绝对路径靠它拼出来。
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  "https://wcti-d3gwebxstb5a57368-1437093153.tcloudbaseapp.com";
+
+const SITE_NAME = "WCTI";
+const SITE_TITLE = "WCTI · 你的世界杯本命球队测试";
+const SITE_DESC = "不懂球也没关系，12 道题帮你找到最适合支持的世界杯球队。";
+
 export const metadata: Metadata = {
-  title: "WCTI · 世界杯本命球队测试",
-  description: "不懂球也没关系，12 道题帮你找到最适合支持的世界杯球队。",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s · WCTI",
+  },
+  description: SITE_DESC,
+  applicationName: SITE_NAME,
+  keywords: ["世界杯", "球队测试", "MBTI", "WCTI", "World Cup", "人格测试"],
+  authors: [{ name: "WCTI" }],
+  openGraph: {
+    type: "website",
+    locale: "zh_CN",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESC,
+    url: "/",
+    images: [
+      {
+        url: "/og/default.png",
+        width: 1200,
+        height: 630,
+        alt: SITE_TITLE,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESC,
+    images: ["/og/default.png"],
+  },
+  // 微信不读 Twitter Card，但读 Open Graph；以下额外宣告供微信/QQ 优化预览
+  other: {
+    "wechat:image": `${SITE_URL}/og/default.png`,
+    "wechat:title": SITE_TITLE,
+    "wechat:description": SITE_DESC,
+  },
 };
 
 export const viewport: Viewport = {

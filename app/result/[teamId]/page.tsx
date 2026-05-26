@@ -15,10 +15,38 @@ export function generateMetadata({
   params: { teamId: string };
 }): Metadata {
   const team = getTeam(params.teamId);
-  if (!team) return { title: "未找到球队 · WCTI" };
+  if (!team) return { title: "未找到球队" };
+
+  const title = `我的本命是 ${team.name} ${team.flag}`;
+  const ogTitle = `我的世界杯本命是「${team.name}」 · ${team.personality}`;
+  const description = `${team.personality}：${team.tagline}`;
+  const ogImage = `/og/${team.id}.png`;
+  const pageUrl = `/result/${team.id}/`;
+
   return {
-    title: `我的本命是 ${team.name} ${team.flag} · WCTI`,
-    description: `${team.personality}：${team.tagline}`,
+    title,
+    description,
+    alternates: { canonical: pageUrl },
+    openGraph: {
+      type: "article",
+      title: ogTitle,
+      description,
+      url: pageUrl,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${team.name} · ${team.personality}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
