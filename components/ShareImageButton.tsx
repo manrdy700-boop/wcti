@@ -52,8 +52,6 @@ export default function ShareImageButton({
     if (state === "loading") return;
     setState("loading");
 
-    const pageUrl =
-      typeof window !== "undefined" ? window.location.href : "";
     const isWeChat =
       typeof navigator !== "undefined" &&
       /MicroMessenger/i.test(navigator.userAgent);
@@ -73,18 +71,16 @@ export default function ShareImageButton({
         type: blob.type || "image/png",
       });
 
-      // 优先：带图片分享（Android Chrome / iOS Safari 15+）
+      // ⚠️ 关键：只传 files，不传 text/url。
+      // 一旦传了 url，微信会自作主张把它包成"链接卡片"，
+      // 而不是发一张纯图片。我们要的是后者，URL 信息靠图里的二维码承载。
       if (
         typeof navigator !== "undefined" &&
         typeof navigator.canShare === "function" &&
         navigator.canShare({ files: [file] })
       ) {
         try {
-          await navigator.share({
-            files: [file],
-            title,
-            text: `${text}\n${pageUrl}`,
-          });
+          await navigator.share({ files: [file] });
           setState("idle");
           return;
         } catch (e) {
@@ -95,25 +91,8 @@ export default function ShareImageButton({
           // 其它错误：往下走兜底
         }
       }
-
-      // 次选：仅分享文字+链接（少数支持 share() 但不支持 files 的浏览器）
-      if (
-        typeof navigator !== "undefined" &&
-        typeof navigator.share === "function"
-      ) {
-        try {
-          await navigator.share({ title, text, url: pageUrl });
-          setState("idle");
-          return;
-        } catch (e) {
-          if ((e as Error).name === "AbortError") {
-            setState("idle");
-            return;
-          }
-        }
-      }
     } catch {
-      /* fetch / share 全失败，走兜底 */
+      /* fetch / share 失败，走兜底 */
     }
 
     setState("fallback");
