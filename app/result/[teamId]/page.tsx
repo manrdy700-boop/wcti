@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TEAM_LIST, getTeam } from "@/data/teams";
 import CopyLinkButton from "@/components/CopyLinkButton";
+import ShareImageButton from "@/components/ShareImageButton";
 
 // 预生成所有球队的结果页（静态化）
 export function generateStaticParams() {
@@ -137,7 +138,14 @@ export default function ResultPage({ params }: { params: { teamId: string } }) {
       </section>
 
       {/* CTAs */}
-      <section className="mt-2 flex flex-col gap-3 sm:flex-row sm:justify-center">
+      <section className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+        {/* 主行动：分享到微信（带图片）*/}
+        <ShareImageButton
+          imageUrl={`/og/${team.id}.png`}
+          title={`我的世界杯本命球队是「${team.name}」`}
+          text={`${team.personality}：${team.tagline}`}
+          filename={`wcti-${team.id}`}
+        />
         <Link
           href="/quiz"
           className="inline-flex w-full items-center justify-center rounded-full bg-amber-400 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-300 active:scale-95 sm:w-auto"
